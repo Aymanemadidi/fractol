@@ -6,7 +6,7 @@
 /*   By: ael-madi <ael-madi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 17:31:07 by ael-madi          #+#    #+#             */
-/*   Updated: 2021/07/24 18:20:15 by ael-madi         ###   ########.fr       */
+/*   Updated: 2021/07/24 18:21:33 by ael-madi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int close_with_red(void *param)
     exit(0);
 }
 
-int	key_hook(int keycode, t_vars *vars)
+int	key_hook(int keycode, t_mlx *vars)
 {	
     (void)vars;
 	if (keycode == 53)
