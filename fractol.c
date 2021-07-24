@@ -1,23 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   fractol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-madi <ael-madi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 17:31:07 by ael-madi          #+#    #+#             */
-/*   Updated: 2021/07/23 19:38:39 by ael-madi         ###   ########.fr       */
+/*   Updated: 2021/07/24 18:20:15 by ael-madi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <mlx.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-typedef struct	s_vars {
-	void	*mlx;
-	void	*win;
-}				t_vars;
+#include "fractol.h"
 
 int close_with_red(void *param)
 {
@@ -27,6 +20,7 @@ int close_with_red(void *param)
 
 int	key_hook(int keycode, t_vars *vars)
 {	
+    (void)vars;
 	if (keycode == 53)
 		exit(0);
 	printf("Hello from key_hook %d\n!\n", keycode);
@@ -35,18 +29,18 @@ int	key_hook(int keycode, t_vars *vars)
 
 int main()
 {   
-    double y = 0;
-    double x = 0;
+    int y = 0;
+    int x = 0;
     int n = 0;
     int maxIterations = 50;
-    double ImageHeight = 1200;
-    double ImageWidth = 1200;
-    double MinRe = -2.0;
-    double MaxRe = 1.0;
-    double MinIm = -1.2;
-    double MaxIm = MinIm+(MaxRe-MinRe)*(ImageHeight/ImageWidth);
-    double Re_factor = (MaxRe-MinRe)/(ImageWidth-1);
-    double Im_factor = (MaxIm-MinIm)/(ImageHeight-1);
+    int imageHeight = 1200;
+    int imageWidth = 1200;
+    double minRe = -2.0;
+    double maxRe = 1.0;
+    double minIm = -1.2;
+    double maxIm = minIm+(maxRe-minRe)*(imageHeight/imageWidth);
+    double re_factor = (maxRe-minRe)/(imageWidth-1);
+    double im_factor = (maxIm-minIm)/(imageHeight-1);
     double c_im = 0;
     double c_re = 0;
     double z_re = 0;
@@ -55,20 +49,24 @@ int main()
     double z_im2 = 0;
     int isInside = 1;
 
-    t_vars	vars;
+    t_mlx	vars;
 
-    vars.mlx = mlx_init();
-	vars.win = mlx_new_window(vars.mlx, 1200, 1200, "Hello world!");
+    vars.mlx_ptr = mlx_init();
+	vars.win = mlx_new_window(vars.mlx_ptr, 1200, 1200, "Hello world!");
+    vars.img.img_ptr = mlx_new_image(vars.mlx_ptr, imageWidth, imageHeight);
+    
+    vars.img.data = (int *)mlx_get_data_addr(vars.img.img_ptr, &vars.img.bpp, &vars.img.size_l,
+	&vars.img.endian);
 
     mlx_key_hook(vars.win, key_hook, &vars);
     mlx_hook(vars.win, 17, 0, close_with_red, &vars);
 
-    while (y < ImageHeight)
+    while (y < imageHeight)
     {   
-        c_im = MaxIm - y*Im_factor;
-        while (x <ImageWidth)
+        c_im = maxIm - y*im_factor;
+        while (x <imageWidth)
         {   
-            c_re = MinRe + x*Re_factor;
+            c_re = minRe + x*re_factor;
             z_re = c_re;
             z_im = c_im;
             isInside = 1;
@@ -79,6 +77,7 @@ int main()
                 if(z_re2 + z_im2 > 4)
                 {
                     isInside = 0;
+                    //vars.img.data[y * imageWidth + x] = 0;
                     break;
                 }
                 z_im = 2*z_re*z_im + c_im;
@@ -87,12 +86,17 @@ int main()
             }
             n = 0;
             if(isInside)
-                mlx_pixel_put(vars.mlx, vars.win, x, y, 0XF00FFF);
+            {
+                vars.img.data[y * imageWidth + x] = 0xFFFFFF;
+                //mlx_pixel_put(vars.mlx_ptr, vars.win, x, y, 0XF00FFF);
+            }
+                
             x++;
         }
         x = 0;
         y++;
     }
-    mlx_loop(vars.mlx);
+    mlx_put_image_to_window(vars.mlx_ptr, vars.win, vars.img.img_ptr, 0, 0);
+    mlx_loop(vars.mlx_ptr);
     return (0);
 }
