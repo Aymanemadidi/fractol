@@ -27,9 +27,32 @@ int	key_hook(int keycode, t_mlx *vars)
     return (0);
 }
 
+void init_fract(t_fract *fract)
+{
+    fract->y = 0;
+    fract->x = 0;
+    fract->n = 0;
+    fract->maxIterations = 50;
+    fract->imageHeight = 800;
+    fract->imageWidth = 800;
+    fract->minRe = -2.0;
+    fract->maxRe = 1.0;//decrease here to zoom
+    fract->minIm = -1.2;//decrease here to zoom
+    fract->maxIm = fract->minIm+(fract->maxRe-fract->minRe)*(fract->imageHeight/fract->imageWidth);
+    fract->re_factor = (fract->maxRe-fract->minRe)/(fract->imageWidth-1);
+    fract->im_factor = (fract->maxIm-fract->minIm)/(fract->imageHeight-1);
+    fract->c_im = 0;
+    fract->c_re = 0;
+    fract->z_re = 0;
+    fract->z_im = 0;
+    fract->z_re2 = 0;
+    fract->z_im2 = 0;
+    fract->isInside = 1;
+}
+
 int main()
 {   
-    int y = 0;
+    /*int y = 0;
     int x = 0;
     int n = 0;
     int maxIterations = 50;
@@ -47,13 +70,16 @@ int main()
     double z_im = 0;
     double z_re2 = 0;
     double z_im2 = 0;
-    int isInside = 1;
+    int isInside = 1;*/
+    t_fract fract;
+
+    init_fract(&fract);
 
     t_mlx	vars;
 
     vars.mlx_ptr = mlx_init();
 	vars.win = mlx_new_window(vars.mlx_ptr, 800, 800, "fractol");
-    vars.img.img_ptr = mlx_new_image(vars.mlx_ptr, imageWidth, imageHeight);
+    vars.img.img_ptr = mlx_new_image(vars.mlx_ptr, fract.imageWidth, fract.imageHeight);
     
     vars.img.data = (int *)mlx_get_data_addr(vars.img.img_ptr, &vars.img.bpp, &vars.img.size_l,
 	&vars.img.endian);
@@ -61,44 +87,44 @@ int main()
     mlx_key_hook(vars.win, key_hook, &vars);
     mlx_hook(vars.win, 17, 0, close_with_red, &vars);
 
-    while (y < imageHeight)
+    while (fract.y < fract.imageHeight)
     {   
-        c_im = maxIm - y*im_factor;
-        while (x <imageWidth)
+        fract.c_im = fract.maxIm - fract.y*fract.im_factor;
+        while (fract.x <fract.imageWidth)
         {   
-            c_re = minRe + x*re_factor;
-            z_re = c_re;
-            z_im = c_im;
-            isInside = 1;
-            while (n < maxIterations)
+            fract.c_re = fract.minRe + fract.x*fract.re_factor;
+            fract.z_re = fract.c_re;
+            fract.z_im = fract.c_im;
+            fract.isInside = 1;
+            while (fract.n <fract. maxIterations)
             {
-                z_re2 = z_re*z_re;
-                z_im2 = z_im*z_im;
-                if(z_re2 + z_im2 > 4)
+                fract.z_re2 = fract.z_re*fract.z_re;
+                fract.z_im2 = fract.z_im*fract.z_im;
+                if(fract.z_re2 + fract.z_im2 > 4)
                 {
-                    isInside = 0;
+                    fract.isInside = 0;
                     //vars.img.data[y * imageWidth + x] = 0;
                     break;
                 }
-                z_im = 2*z_re*z_im + c_im;
-                z_re = z_re2 - z_im2 + c_re;
-                n++;
+                fract.z_im = 2*fract.z_re*fract.z_im + fract.c_im;
+                fract.z_re = fract.z_re2 - fract.z_im2 + fract.c_re;
+                fract.n++;
             }
-            if (n < maxIterations)
+            if (fract.n < fract.maxIterations)
             {
-                vars.img.data[y * imageWidth + x] = 2555904 - 100000 * n;
+                vars.img.data[fract.y * fract.imageWidth + fract.x] = 2555904 - 100000 * fract.n;
             }
-            n = 0;
-            if(isInside)
+            fract.n = 0;
+            if(fract.isInside)
             {
-                vars.img.data[y * imageWidth + x] = 0;
+                vars.img.data[fract.y * fract.imageWidth + fract.x] = 0;
                 //mlx_pixel_put(vars.mlx_ptr, vars.win, x, y, 0XF00FFF);
             }
                 
-            x++;
+            fract.x++;
         }
-        x = 0;
-        y++;
+        fract.x = 0;
+        fract.y++;
     }
     mlx_put_image_to_window(vars.mlx_ptr, vars.win, vars.img.img_ptr, 0, 0);
     mlx_loop(vars.mlx_ptr);

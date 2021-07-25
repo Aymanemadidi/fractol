@@ -33,4 +33,29 @@ typedef struct	s_mlx
 	t_img		img;
 }				t_mlx;
 
+typedef struct	s_fract
+{
+	int y;
+    int x;
+    int n;
+    int maxIterations;
+    int imageHeight;
+    int imageWidth;
+    double minRe;
+    double maxRe;//decrease here to zoom
+    double minIm;//decrease here to zoom
+    double maxIm;
+    double re_factor;
+    double im_factor;
+    double c_im;
+    double c_re;
+    double z_re;
+    double z_im;
+    double z_re2;
+    double z_im2;
+    int isInside;	
+}				t_fract;
+
+
+
 #endif
