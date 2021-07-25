@@ -6,7 +6,7 @@
 /*   By: ael-madi <ael-madi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 17:31:07 by ael-madi          #+#    #+#             */
-/*   Updated: 2021/07/24 18:21:33 by ael-madi         ###   ########.fr       */
+/*   Updated: 2021/07/25 21:01:26 by ael-madi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ int main()
     int imageHeight = 1200;
     int imageWidth = 1200;
     double minRe = -2.0;
-    double maxRe = 1.0;
-    double minIm = -1.2;
+    double maxRe = 1.0;//decrease here to zoom
+    double minIm = -1.2;//decrease here to zoom
     double maxIm = minIm+(maxRe-minRe)*(imageHeight/imageWidth);
     double re_factor = (maxRe-minRe)/(imageWidth-1);
     double im_factor = (maxIm-minIm)/(imageHeight-1);
@@ -48,6 +48,7 @@ int main()
     double z_re2 = 0;
     double z_im2 = 0;
     int isInside = 1;
+    printf("maxIm: %f\n", maxIm);
 
     t_mlx	vars;
 
@@ -84,10 +85,14 @@ int main()
                 z_re = z_re2 - z_im2 + c_re;
                 n++;
             }
+            if (n < maxIterations)
+            {
+                vars.img.data[y * imageWidth + x] = 2555904 - 100000 * n;
+            }
             n = 0;
             if(isInside)
             {
-                vars.img.data[y * imageWidth + x] = 0xFFFFFF;
+                vars.img.data[y * imageWidth + x] = 0;
                 //mlx_pixel_put(vars.mlx_ptr, vars.win, x, y, 0XF00FFF);
             }
                 
