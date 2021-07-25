@@ -33,8 +33,8 @@ int main()
     int x = 0;
     int n = 0;
     int maxIterations = 50;
-    int imageHeight = 1200;
-    int imageWidth = 1200;
+    int imageHeight = 800;
+    int imageWidth = 800;
     double minRe = -2.0;
     double maxRe = 1.0;//decrease here to zoom
     double minIm = -1.2;//decrease here to zoom
@@ -48,12 +48,11 @@ int main()
     double z_re2 = 0;
     double z_im2 = 0;
     int isInside = 1;
-    printf("maxIm: %f\n", maxIm);
 
     t_mlx	vars;
 
     vars.mlx_ptr = mlx_init();
-	vars.win = mlx_new_window(vars.mlx_ptr, 1200, 1200, "Hello world!");
+	vars.win = mlx_new_window(vars.mlx_ptr, 800, 800, "fractol");
     vars.img.img_ptr = mlx_new_image(vars.mlx_ptr, imageWidth, imageHeight);
     
     vars.img.data = (int *)mlx_get_data_addr(vars.img.img_ptr, &vars.img.bpp, &vars.img.size_l,

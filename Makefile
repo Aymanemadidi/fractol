@@ -19,9 +19,11 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-		gcc -Wall -g -Werror -Wextra -c $(SRC)
-		gcc -Wall -g -Werror -Wextra -L. -lmlx -framework OpenGL -framework Appkit $(OBJ) -o $(NAME)
-
+		#linux
+		gcc -g -Wall -Wextra -Werror fractol.c  ./mlx.h -D NUM_THREADS=4 -D LINUX -L ./minilibx-linux -lmlx -lm -lX11 -lXext -lpthread
+		#MACOS
+		#gcc -Wall -g -Werror -Wextra -c $(SRC)
+		#gcc -Wall -g -Werror -Wextra -L. -lmlx -framework OpenGL -framework Appkit $(OBJ) -o $(NAME)
 clean:
 		rm -rf $(OBJ)
 
