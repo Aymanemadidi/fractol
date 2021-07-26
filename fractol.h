@@ -6,14 +6,14 @@
 /*   By: ael-madi <ael-madi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/24 17:36:04 by ael-madi          #+#    #+#             */
-/*   Updated: 2021/07/24 17:39:11 by ael-madi         ###   ########.fr       */
+/*   Updated: 2021/07/26 14:29:30 by ael-madi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FRACTOL_H
 # define FRACTOL_H
 
-# include "mlx.h"
+# include <mlx.h>
 # include <stdio.h>
 # include <stdlib.h>
 

@@ -6,7 +6,7 @@
 /*   By: ael-madi <ael-madi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 17:31:07 by ael-madi          #+#    #+#             */
-/*   Updated: 2021/07/25 21:01:26 by ael-madi         ###   ########.fr       */
+/*   Updated: 2021/07/26 20:19:18 by ael-madi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	key_hook(int keycode, t_mlx *vars)
     (void)vars;
 	if (keycode == 53)
 		exit(0);
+    if (keycode == 6)
+        printf("you need to zoom\n");  
 	printf("Hello from key_hook %d\n!\n", keycode);
     return (0);
 }
@@ -32,7 +34,7 @@ void init_fract(t_fract *fract)
     fract->y = 0;
     fract->x = 0;
     fract->n = 0;
-    fract->maxIterations = 50;
+    fract->maxIterations = 5000;
     fract->imageHeight = 800;
     fract->imageWidth = 800;
     fract->minRe = -2.0;
@@ -87,10 +89,10 @@ int main()
     mlx_key_hook(vars.win, key_hook, &vars);
     mlx_hook(vars.win, 17, 0, close_with_red, &vars);
 
-    while (fract.y < fract.imageHeight)
+    while (fract.y< fract.imageHeight)
     {   
         fract.c_im = fract.maxIm - fract.y*fract.im_factor;
-        while (fract.x <fract.imageWidth)
+        while (fract.x<fract.imageWidth)
         {   
             fract.c_re = fract.minRe + fract.x*fract.re_factor;
             fract.z_re = fract.c_re;
@@ -112,13 +114,14 @@ int main()
             }
             if (fract.n < fract.maxIterations)
             {
-                vars.img.data[fract.y * fract.imageWidth + fract.x] = 2555904 - 100000 * fract.n;
+                vars.img.data[fract.y * fract.imageWidth + fract.x] = 2555904 - 10000 * fract.n;
+                //mlx_pixel_put(vars.mlx_ptr, vars.win, fract.x, fract.y, 2555904 - 10000 * fract.n);
             }
             fract.n = 0;
             if(fract.isInside)
             {
                 vars.img.data[fract.y * fract.imageWidth + fract.x] = 0;
-                //mlx_pixel_put(vars.mlx_ptr, vars.win, x, y, 0XF00FFF);
+                //mlx_pixel_put(vars.mlx_ptr, vars.win, fract.x, fract.y, 0XF00FFF);
             }
                 
             fract.x++;
